@@ -1,0 +1,12 @@
+\.git
+\.gitignore
+\.stow-local-ignore
+\.DS_Store
+\.ruff_cache
+\.pytest_cache
+__pycache__
+README.*
+LICENSE.*
+synch\.sh
+pyproject\.toml
+tests

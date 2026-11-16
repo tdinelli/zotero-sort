@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Runs the zotero_sort package (in ../src) with the configured interpreter (needs Python >= 3.11):
+#   1. $ZOTERO_SORT_PYTHON, e.g. "conda run -n myenv python"
+#   2. the command in $ZOTERO_SORT_CONFIG_DIR/python (default ~/.config/zotero-sort/python)
+#   3. python3
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PYTHON_COMMAND="${ZOTERO_SORT_PYTHON:-}"
+PYTHON_FILE="${ZOTERO_SORT_CONFIG_DIR:-$HOME/.config/zotero-sort}/python"
+[ -z "$PYTHON_COMMAND" ] && [ -f "$PYTHON_FILE" ] && PYTHON_COMMAND="$(head -n1 "$PYTHON_FILE")"
+export PYTHONPATH="$SCRIPT_DIR/../src${PYTHONPATH:+:$PYTHONPATH}"
+exec ${PYTHON_COMMAND:-python3} -m zotero_sort "$@"

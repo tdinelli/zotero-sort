@@ -1,0 +1,7 @@
+# ~/.config/zotero-sort/config.toml  (every key is optional; these are the defaults)
+
+api_key_file = "~/.zotero_api_key"        # Zotero API key with library + write access
+library = "user"                          # "user" = your personal library, or "group:<groupID>"
+inbox = "Inbox"                           # top-level collection that receives new imports
+examples_per_collection = 8               # recent titles shown to Claude for each collection
+notes_file = "~/.config/zotero-sort/notes.md"
