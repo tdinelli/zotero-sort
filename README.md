@@ -13,14 +13,14 @@ It is a [Claude Code skill](https://docs.claude.com/en/docs/claude-code/skills) 
 from the papers you have already filed (plus optional notes). It proposes where each new paper should go
 and **changes nothing until you approve**. Nothing is ever deleted.
 
-```
-| # | First author, year | Title (short)                      | → Collections                 | Tags     |
-|---|--------------------|------------------------------------|-------------------------------|----------|
-| 1 | Smith, 2024        | Ensemble Kalman filters at scale   | Data assimilation/Methods     | #review  |
-| 2 | Lee, 2025          | Shock capturing on moving meshes   | Numerics/Shock capturing      |          |
+What a run looks like:
 
-Approve, or tell me what to change.
-```
+| # | First author, year | Title (short) | → Collections | Tags |
+|---|---|---|---|---|
+| 1 | Smith, 2024 | Ensemble Kalman filters at scale | Data assimilation/Methods | #review |
+| 2 | Lee, 2025 | Shock capturing on moving meshes | Numerics/Shock capturing | |
+
+> Approve, or tell me what to change.
 
 New papers land in an `Inbox` collection in Zotero; the skill works through the Zotero Web API:
 
