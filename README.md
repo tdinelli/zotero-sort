@@ -1,10 +1,28 @@
 # zotero-sort
 
-A [Claude Code skill](https://docs.claude.com/en/docs/claude-code/skills) that files new papers from
-your Zotero `Inbox` collection into your own collection structure, through the Zotero Web API.
+Everyone wants a tidy library. You start a project with clean collections and good intentions. Then
+come months of reading and digging through references, following citations down rabbit holes, and
+the papers pile up faster than you can file them. Dragging each one into the right collection, one at
+a time, is tedious, so it waits. Eventually the backlog is big enough that sorting it feels like a
+project of its own.
 
-Claude proposes a placement table (paper → collections → tags), **waits for your approval**, and only
-then applies it. Nothing is ever deleted.
+zotero-sort takes that chore off your hands. Drop new papers into Zotero, type `/zotero-sort`, and
+Claude files them into **your** collections and tags, following the way you already organize your library.
+
+It is a [Claude Code skill](https://docs.claude.com/en/docs/claude-code/skills) that learns your structure
+from the papers you have already filed (plus optional notes). It proposes where each new paper should go
+and **changes nothing until you approve**. Nothing is ever deleted.
+
+```
+| # | First author, year | Title (short)                      | → Collections                 | Tags     |
+|---|--------------------|------------------------------------|-------------------------------|----------|
+| 1 | Smith, 2024        | Ensemble Kalman filters at scale   | Data assimilation/Methods     | #review  |
+| 2 | Lee, 2025          | Shock capturing on moving meshes   | Numerics/Shock capturing      |          |
+
+Approve, or tell me what to change.
+```
+
+New papers land in an `Inbox` collection in Zotero; the skill works through the Zotero Web API:
 
 ```
 Zotero desktop ── import PDFs into "Inbox", sync ──▶ zotero.org
@@ -19,18 +37,18 @@ Zotero desktop ◀── sync ── zotero.org
 ## How classification works
 
 The skill is generic: it knows nothing about your field until it reads your library. It combines
-two sources:
+three sources:
 
 | Source | Where it lives | Maintained by | Role |
 |---|---|---|---|
 | **Collection tree** | your Zotero library | you, in Zotero | the names, always live |
-| **Examples** | your Zotero library | nobody: they update themselves | the N most recently added titles of each collection show Claude what you *actually* file there |
+| **Examples** | your Zotero library | automatic (they update themselves) | the N most recently added titles of each collection show Claude what you *actually* file there |
 | **Notes** | `~/.config/zotero-sort/notes.md` | you (Claude proposes edits) | intent the examples can't show: boundaries, tie-breakers, exceptions, tag vocabulary |
 
 If notes and examples disagree, the notes win. Collections without notes are classified from
 examples alone, so the notes can be as short as you like. They are worth writing for
 ambiguous boundaries (e.g. "DA theory vs DA applications") and for collections that should only
-be used on request (projects).
+be used on request (e.g. project collections you only file into when asked).
 
 `check` keeps the notes honest. It compares them with the live tree and reports collections that
 have no notes, notes for collections that were renamed or deleted, and empty sections. Claude
@@ -80,9 +98,10 @@ Per-user files:
 
 1. **Install the skill** with [stow](https://www.gnu.org/software/stow/):
    ```sh
-   git clone <this repo> ~/Documents/GitHub/zotero-sort
-   cd ~/Documents/GitHub/zotero-sort && ./synch.sh     # links into ~/.claude/skills/zotero-sort/
+   git clone https://github.com/tdinelli/zotero-sort.git
+   cd zotero-sort && ./synch.sh     # links into ~/.claude/skills/zotero-sort/
    ```
+   The clone can live anywhere; `synch.sh` uses its own location.
    Files are linked one by one (`--no-folding`): after adding a **new** file, run `./synch.sh` again.
    Edits to existing files take effect immediately.
 
@@ -92,6 +111,7 @@ Per-user files:
 3. **Python >= 3.11** (only the standard library is used). If `python3` is older, point the wrapper
    to another interpreter in either of two ways:
    ```sh
+   mkdir -p ~/.config/zotero-sort
    echo "conda run -n myenv python" > ~/.config/zotero-sort/python
    # or: export ZOTERO_SORT_PYTHON="conda run -n myenv python"
    ```
@@ -186,9 +206,9 @@ describe every option.
 ## Development
 
 ```sh
-conda run -n eoshock python -m pytest     # or any Python >= 3.11 with pytest
-conda run -n eoshock ruff format src tests
-conda run -n eoshock ruff check src tests
+python -m pytest     # any Python >= 3.11 with pytest
+ruff format src tests
+ruff check src tests
 ```
 
 Formatting and lint rules (120 columns, isort, pyupgrade, bugbear, simplify) are in `pyproject.toml`.
@@ -207,3 +227,7 @@ The tests cover the pure modules and the client's retry and write policy, using 
 - Duplicate detection is by DOI and normalized title only. Zotero's own *Duplicate Items* is more thorough.
 - Examples are only as good as your existing filing. Messy collections teach messy placements,
   which is why notes override them.
+
+## License
+
+[MIT](LICENSE)
