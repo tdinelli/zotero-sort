@@ -227,6 +227,23 @@ The tests cover the pure modules and the client's retry and write policy, using 
 - Duplicate detection is by DOI and normalized title only. Zotero's own *Duplicate Items* is more thorough.
 - Examples are only as good as your existing filing. Messy collections teach messy placements,
   which is why notes override them.
+- Only tested on macOS. It should work on Linux, but this has not been verified.
+
+## Roadmap
+
+Not implemented yet. The idea is to grow from sorting the Inbox into managing **projects**
+(a paper, a proposal, a thesis chapter) on top of the same library:
+
+- **Project collections:** create a project and file papers into it on request, alongside their topic collections.
+- **Reading status:** track what is to read, read, or cited for each project, with tags.
+- **Project context:** give Claude a project brief (goals, open questions) so it can suggest which library
+  papers are relevant to it.
+- **Query the library:** ask questions in plain language ("what do I have on ensemble filters for shocks?",
+  "which papers in this project compare method A and B?") and get answers grounded in titles, abstracts and notes.
+- **Brainstorm:** use a project's papers as the starting point for discussing ideas, open gaps and possible
+  directions, with every point traced back to the papers it comes from.
+
+As with sorting, every change would be proposed first and applied only after approval.
 
 ## License
 
